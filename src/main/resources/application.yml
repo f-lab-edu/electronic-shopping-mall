@@ -7,6 +7,17 @@ spring:
 
   jpa:
     hibernate:
+#      ddl-auto options
+#      none: 아무 것도 하지 않는다.
+#      create: 어플리케이션 실행 시점에 테이블을 지우고 새로 만든다.
+#      create-drop: create 와 동일하지만 종료 시점에 테이블을 지운다.
+#      update: 변경된 스키마를 적용한다.
+#      validate: 변경된 스키마가 있다면 변경점을 출력하고 어플리케이션을 종료한다.
+#
+#      개발 단계에서 여러가지 테스트를 진행하게 되는데 그때마다 데이터가 DB에 남아있다면
+#      DB를 확인할때 필요한 데이터에 집중하지 못하게 됩니다.
+#      그래서 create 아니면 create-drop 중에서 하나의 옵션을 선택해야 했고 테스트 진행 후에도
+#      눈으로 테이블을 확인할 수 있도록 drop 기능이 없는 create 옵션을 선택하게 됐습니다.
       ddl-auto: create
     properties:
       hibernate:
