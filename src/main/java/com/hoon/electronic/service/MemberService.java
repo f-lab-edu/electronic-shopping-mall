@@ -2,6 +2,7 @@ package com.hoon.electronic.service;
 
 import com.hoon.electronic.domain.Member;
 import com.hoon.electronic.repository.MemberRepository;
+import com.hoon.electronic.util.SHA256Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,9 @@ public class MemberService {
     public Long join(Member member) {
         checkDuplicateMember(member);
 
+        String encodedPassword = passwordEncode(member.getPassword());
+        member.setPassword(encodedPassword);
+
         memberRepository.save(member);
         return member.getId();
     }
@@ -30,4 +34,7 @@ public class MemberService {
         }
     }
 
+    private String passwordEncode(String rawPassword) {
+        return SHA256Util.encode(rawPassword);
+    }
 }
