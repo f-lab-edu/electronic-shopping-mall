@@ -61,7 +61,6 @@ class MemberServiceTest {
     @Test
     public void 비밀번호_암호화() throws Exception {
         String rawPassword = "1234";
-        String encodedPassword = SHA256Util.encode(rawPassword);
 
         Member member = Member.builder()
                 .email("test@example.com")
@@ -71,7 +70,10 @@ class MemberServiceTest {
         Long savedId = memberService.join(member);
 
         Optional<Member> findMember = memberRepository.findById(savedId);
+
         String findPassword = findMember.map(Member::getPassword).orElse("nothing");
+        String findSalt = findMember.map(Member::getSalt).orElse("nothing");
+        String encodedPassword = SHA256Util.encode(rawPassword, findSalt);
 
         assertEquals(findPassword, encodedPassword);
     }
