@@ -42,6 +42,9 @@ public class Member {
     @Setter
     private String password;
 
+    @Setter
+    private String salt;
+
     private String name;
 
     private String phone;

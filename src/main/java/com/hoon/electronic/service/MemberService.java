@@ -19,8 +19,7 @@ public class MemberService {
     public Long join(Member member) {
         checkDuplicateMember(member);
 
-        String encodedPassword = passwordEncode(member.getPassword());
-        member.setPassword(encodedPassword);
+        passwordEncode(member);
 
         memberRepository.save(member);
         return member.getId();
@@ -34,7 +33,11 @@ public class MemberService {
         }
     }
 
-    private String passwordEncode(String rawPassword) {
-        return SHA256Util.encode(rawPassword);
+    private void passwordEncode(Member member) {
+        String salt = SHA256Util.generateSalt();
+        String encodedPassword = SHA256Util.encode(member.getPassword(), salt);
+
+        member.setSalt(salt);
+        member.setPassword(encodedPassword);
     }
 }

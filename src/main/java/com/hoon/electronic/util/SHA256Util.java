@@ -2,15 +2,16 @@ package com.hoon.electronic.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 public class SHA256Util {
-    public static String encode(String msg) {
+    public static String encode(String password, String salt) {
         String result = "";
-        MessageDigest md;
 
         try {
-            md = MessageDigest.getInstance("SHA-256");
-            md.update(msg.getBytes());
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(salt.getBytes());
+            md.update(password.getBytes());
 
             byte[] data = md.digest();
 
@@ -27,4 +28,19 @@ public class SHA256Util {
 
         return result;
     }
+
+    public static String generateSalt() {
+        Random random = new Random();
+
+        byte[] salt = new byte[8];
+        random.nextBytes(salt);
+
+        StringBuilder sb = new StringBuilder();
+        for (byte b : salt) {
+            sb.append(String.format("%02x", b));
+        }
+
+        return sb.toString();
+    }
+
 }
