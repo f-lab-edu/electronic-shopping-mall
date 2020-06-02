@@ -17,7 +17,7 @@ public class MemberService {
 
     @Transactional
     public Long join(Member member) {
-        checkDuplicateMember(member);
+        checkDuplicateMember(member.getEmail());
 
         passwordEncode(member);
 
@@ -25,12 +25,16 @@ public class MemberService {
         return member.getId();
     }
 
-    private void checkDuplicateMember(Member member) {
-        List<Member> findMember = memberRepository.findByEmail(member.getEmail());
+    public void checkDuplicateMember(String email) {
+        List<Member> findMember = memberRepository.findByEmail(email);
 
-        if (!findMember.isEmpty()) {
+        if (isExistMember(findMember)) {
             throw new IllegalStateException("중복된 회원입니다.");
         }
+    }
+
+    public boolean isExistMember(List<Member> member) {
+        return !member.isEmpty();
     }
 
     private void passwordEncode(Member member) {
