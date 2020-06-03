@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url:
+    driver-class: com.mysql.cj.jdbc.Driver
+    username:
+    password:
+
+  jpa:
+    hibernate:
+#      ddl-auto options
+#      none: 아무 것도 하지 않는다.
+#      create: 어플리케이션 실행 시점에 테이블을 지우고 새로 만든다.
+#      create-drop: create 와 동일하지만 종료 시점에 테이블을 지운다.
+#      update: 변경된 스키마를 적용한다.
+#      validate: 변경된 스키마가 있다면 변경점을 출력하고 어플리케이션을 종료한다.
+#
+#      create, create-drop 의 경우 테이블에 존재하는 데이터가 모두 삭제되기 때문에 데이터를
+#      조회하는 상황에서 불편함이 존재할 수 있다. 하지만 테이블을 깔끔하게 유지할 수 있어서
+#      본인이 원하는 상황을 만들 수 있다는 장점을 가진다.
+#
+#      update 는 기존 데이터를 유지하기 때문에 데이터를 삽입해야 하는 번거로움을 줄일 수 있다.
+#      하지만 변경된 스키마를 적용하는 것이 기존 컬럼을 수정하거나 삭제하는 것이 아니라
+#      add column 을 통해 변경 사항을 추가하는 것이기 때문에 불필요한 컬럼이 생길 수 있다.
+#      이러한 작업은 기존 컬럼에 존재하는 데이터를 의도치 않게 수정 혹은 삭제하는 것을 방지하기 위함이다.
+#
+#      이처럼 각 옵션마다 장단점을 가지기 때문에 개발 단계에서는 개발자가 필요한 옵션을
+#      상황에 맞게 사용하는 것이 좋겠다.
+#
+#      다만 운영에서는 DB에 있는 데이터를 수정하거나 삭제하는 것이 큰 장애를 만들 수 있기 때문에
+#      validate 를 사용해 스키마 검증 정도만 진행하거나 아예 ddl-auto 를 사용하지 않는 것이 좋겠다.
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+
+logging.level:
+  org.hibernate.SQL: debug
