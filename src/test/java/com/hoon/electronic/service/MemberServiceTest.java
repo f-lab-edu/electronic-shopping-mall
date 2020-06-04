@@ -77,4 +77,11 @@ class MemberServiceTest {
 
         assertEquals(findPassword, encodedPassword);
     }
+
+    @Test
+    public void 비밀번호_암호화_salt없음() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            SHA256Util.encode("password", null);
+        }, "예외가 발생하지 않았다.");
+    }
 }
