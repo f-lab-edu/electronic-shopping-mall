@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
 @Transactional
@@ -67,7 +68,13 @@ class MemberServiceTest {
                 .password(rawPassword)
                 .build();
 
-        Long savedId = memberService.join(member);
+        Long savedId = 0L;
+
+        try {
+            savedId = memberService.join(member);
+        } catch (NullPointerException e) {
+            fail();
+        }
 
         Optional<Member> findMember = memberRepository.findById(savedId);
 
@@ -78,10 +85,4 @@ class MemberServiceTest {
         assertEquals(findPassword, encodedPassword);
     }
 
-    @Test
-    public void 비밀번호_암호화_salt없음() throws Exception {
-        assertThrows(NullPointerException.class, () -> {
-            SHA256Util.encode("password", null);
-        }, "예외가 발생하지 않았다.");
-    }
 }
