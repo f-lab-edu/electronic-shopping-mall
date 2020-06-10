@@ -44,4 +44,27 @@ public class MemberService {
         member.setSalt(salt);
         member.setPassword(encodedPassword);
     }
+
+    @Transactional
+    public String login(String email, String password) {
+        List<Member> members = memberRepository.findByEmail(email);
+
+        if (isNotExistMember(members)) {
+            throw new IllegalStateException("회원정보가 없습니다.");
+        }
+
+        Member findMember = members.get(0);
+        // 로그인 시 입력한 비밀번호와 DB에 저장된 멤버의 salt 값으로 암호화를 진행
+        String encodedPassword = SHA256Util.encode(password, findMember.getSalt());
+
+        if (findMember.isNotMatchPassword(encodedPassword)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return findMember.getEmail();
+    }
+
+    private boolean isNotExistMember(List<Member> members) {
+        return members.isEmpty();
+    }
 }

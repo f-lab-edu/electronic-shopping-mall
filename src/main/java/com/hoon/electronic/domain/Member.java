@@ -64,4 +64,7 @@ public class Member {
 
     private LocalDateTime createDateTime;
 
+    public boolean isNotMatchPassword(String loginPassword) {
+        return !password.equals(loginPassword);
+    }
 }
