@@ -1,5 +1,6 @@
 package com.hoon.electronic.domain;
 
+import org.apache.commons.lang3.StringUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -65,6 +66,6 @@ public class Member {
     private LocalDateTime createDateTime;
 
     public boolean isNotMatchPassword(String loginPassword) {
-        return !password.equals(loginPassword);
+        return !StringUtils.equals(password, loginPassword);
     }
 }
