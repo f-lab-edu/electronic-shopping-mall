@@ -49,7 +49,7 @@ public class MemberService {
     public String login(String email, String password) {
         List<Member> members = memberRepository.findByEmail(email);
 
-        if (isNotExistMember(members)) {
+        if (members.isEmpty()) {
             throw new IllegalStateException("회원정보가 없습니다.");
         }
 
@@ -64,7 +64,4 @@ public class MemberService {
         return findMember.getEmail();
     }
 
-    private boolean isNotExistMember(List<Member> members) {
-        return members.isEmpty();
-    }
 }
