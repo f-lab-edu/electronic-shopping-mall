@@ -68,7 +68,13 @@ class MemberServiceTest {
                 .password(rawPassword)
                 .build();
 
-        Long savedId = memberService.join(member);
+        Long savedId = 0L;
+
+        try {
+            savedId = memberService.join(member);
+        } catch (NullPointerException e) {
+            fail();
+        }
 
         Optional<Member> findMember = memberRepository.findById(savedId);
 
