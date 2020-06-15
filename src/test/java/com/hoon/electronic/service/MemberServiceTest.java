@@ -85,4 +85,49 @@ class MemberServiceTest {
         assertEquals(findPassword, encodedPassword);
     }
 
+    @Test
+    public void 로그인() throws Exception {
+        String email = "tester@example.com";
+        String password = "1234";
+
+        String loginEmail = null;
+
+        try {
+            loginEmail = memberService.login(email, password);
+        } catch (IllegalStateException e) {
+            fail("회원정보가 없습니다.");
+        } catch (IllegalArgumentException e) {
+            fail("비밀번호가 일치하지 않습니다.");
+        }
+
+        assertEquals(email, loginEmail);
+    }
+
+    @Test
+    public void 로그인_회원정보_없음() throws Exception {
+        String email = "fail@example.com";
+        String password = "1234";
+
+        try {
+            memberService.login(email, password);
+            fail("회원정보가 있는 경우 실패입니다.");
+        } catch (IllegalStateException e) {
+            // PASS
+        }
+    }
+
+    @Test
+    public void 로그인_비밀번호_불일치() throws Exception {
+        String email = "tester@example.com";
+        String password = "fail";
+
+        try {
+            memberService.login(email, password);
+            fail("비밀번호가 일치하는 경우 실패입니다.");
+        } catch (IllegalStateException e) {
+            fail("회원정보가 없습니다.");
+        } catch (IllegalArgumentException e) {
+            // PASS
+        }
+    }
 }
