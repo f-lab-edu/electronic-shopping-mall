@@ -1,5 +1,6 @@
 package com.hoon.electronic.controller;
 
+import com.hoon.electronic.aop.LoginType;
 import com.hoon.electronic.domain.item.CreateItemDto;
 import com.hoon.electronic.domain.item.ItemDto;
 import com.hoon.electronic.domain.item.UpdateItemDto;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static com.hoon.electronic.domain.AccountPermissionLevel.ADMIN;
+
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ public class ItemController {
         return itemService.list(categoryId, cursorId);
     }
 
+    @LoginType(level = ADMIN)
     @PostMapping
     public HttpStatus create(@RequestParam("category_id") Long categoryId,
                              @RequestBody CreateItemDto createItemDto) {
@@ -40,6 +44,7 @@ public class ItemController {
         return HttpStatus.CREATED;
     }
 
+    @LoginType(level = ADMIN)
     @PutMapping("/{id}")
     public HttpStatus update(@PathVariable("id") Long id,
                              @RequestBody UpdateItemDto updateItemDto) {
