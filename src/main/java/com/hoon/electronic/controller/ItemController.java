@@ -28,15 +28,18 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping
-    public List<ItemDto> list(@RequestParam("category_id") Long categoryId,
-                              @RequestParam("cursor_id") Long cursorId) {
+    public List<ItemDto> list(@RequestParam("categoryId") Long categoryId,
+                              @RequestParam("cursorId") Long cursorId) {
+        if (cursorId == null) {
+            throw new IllegalArgumentException("잘못된 cursorId 입니다.");
+        }
 
         return itemService.list(categoryId, cursorId);
     }
 
     @LoginType(level = ADMIN)
     @PostMapping
-    public HttpStatus create(@RequestParam("category_id") Long categoryId,
+    public HttpStatus create(@RequestParam("categoryId") Long categoryId,
                              @RequestBody CreateItemDto createItemDto) {
 
         itemService.saveItem(categoryId, createItemDto);
