@@ -32,6 +32,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
+#        컬렉션을 설정한 size만큼 IN 쿼리로 조회한다. 해당 옵션이 없을 경우 조회하고자 하는 아이템의
+#        갯수만큼 쿼리가 N번 호출되기 때문에 성능을 떨어뜨릴 수 있다.
+        default_batch_fetch_size: 100
 
 logging.level:
   org.hibernate.SQL: debug

@@ -1,4 +1,4 @@
-package com.hoon.electronic.domain;
+package com.hoon.electronic.domain.item;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -24,16 +25,17 @@ public class ItemAttribute {
 
     private String attribute;
 
+    @Setter
     private String value;
 
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
 
-    public ItemAttribute(CreateItemAttributeDto dto) {
-        this.attribute = dto.getAttribute();
-        this.value = dto.getValue();
+    public ItemAttribute(String attribute, String value) {
+        this.attribute = attribute;
+        this.value = value;
     }
 
 }
