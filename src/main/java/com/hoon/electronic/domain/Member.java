@@ -67,6 +67,7 @@ public class Member {
     private AccountPermissionLevel level;
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<Purchase> purchaseList = new ArrayList<>();
 
     private LocalDateTime createDateTime;

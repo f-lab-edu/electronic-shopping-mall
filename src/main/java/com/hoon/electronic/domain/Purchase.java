@@ -36,7 +36,12 @@ public class Purchase {
     private Member member;
 
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<PurchaseItem> purchaseItemList = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
 
     private LocalDateTime purchaseDateTime;
 }
