@@ -4,96 +4,129 @@ import com.hoon.electronic.domain.Member;
 import com.hoon.electronic.repository.MemberRepository;
 import com.hoon.electronic.util.SHA256Util;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.never;
+import static org.mockito.BDDMockito.then;
 
-@SpringBootTest
-@Transactional
+@ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
+    public static final String email = "test@example.com";
+    public static final String rawPassword = "1234";
 
+    @InjectMocks
     MemberService memberService;
-    MemberRepository memberRepository;
 
-    @Autowired
-    public MemberServiceTest(MemberService memberService, MemberRepository memberRepository) {
-        this.memberService = memberService;
-        this.memberRepository = memberRepository;
-    }
+    @Mock
+    MemberRepository memberRepository;
 
     @Test
     public void 회원가입() throws Exception {
         Member member = Member.builder()
-                .email("test@example.com")
-                .password("1234")
+                .email(email)
+                .password(rawPassword)
                 .name("test")
                 .build();
 
-        Long savedId = memberService.join(member);
-        Member findMember = memberRepository.findById(savedId).orElse(null);
+        memberService.join(member);
 
-        assertEquals(member, findMember);
+        then(memberRepository)
+                .should()
+                .save(any(Member.class));
     }
 
     @Test
     public void 회원가입_중복회원검증() throws Exception {
         Member member1 = Member.builder()
-                .email("test@example.com")
-                .password("1234")
+                .email(email)
+                .password(rawPassword)
                 .build();
 
         Member member2 = Member.builder()
-                .email("test@example.com")
-                .password("1234")
+                .email(email)
+                .password(rawPassword)
                 .build();
 
-        assertThrows(IllegalStateException.class, () -> {
+        given(memberRepository.findByEmail(email)).willReturn(Arrays.asList(member1, member2));
+
+        try {
             memberService.join(member1);
-            memberService.join(member2);
-        }, "예외가 발생하지 않았다.");
+            fail("예외가 발생해야 한다.");
+        } catch (IllegalStateException e) {
+            // PASS
+        }
+
+        then(memberRepository)
+                .should(never())
+                .save(any(Member.class));
+    }
+
+    @Test
+    public void 비밀번호_암호화_salt없음() throws Exception {
+        String salt = null;
+
+        try {
+            SHA256Util.encode(rawPassword, salt);
+            fail("예외가 발생해야 한다.");
+        } catch (NullPointerException e) {
+            // PASS
+        }
+
+        then(memberRepository)
+                .should(never())
+                .save(any(Member.class));
     }
 
     @Test
     public void 비밀번호_암호화() throws Exception {
-        String rawPassword = "1234";
-
         Member member = Member.builder()
-                .email("test@example.com")
+                .email(email)
                 .password(rawPassword)
                 .build();
 
-        Long savedId = 0L;
-
         try {
-            savedId = memberService.join(member);
+            memberService.join(member);
         } catch (NullPointerException e) {
             fail();
         }
 
-        Optional<Member> findMember = memberRepository.findById(savedId);
-
-        String findPassword = findMember.map(Member::getPassword).orElse("nothing");
-        String findSalt = findMember.map(Member::getSalt).orElse("nothing");
+        String findPassword = member.getPassword();
+        String findSalt = member.getSalt();
         String encodedPassword = SHA256Util.encode(rawPassword, findSalt);
+
+        then(memberRepository)
+                .should()
+                .save(any(Member.class));
 
         assertEquals(findPassword, encodedPassword);
     }
 
     @Test
     public void 로그인() throws Exception {
-        String email = "tester@example.com";
-        String password = "1234";
+        String salt = SHA256Util.generateSalt();
+        String encodedPassword = SHA256Util.encode(rawPassword, salt);
+
+        Member member = Member.builder()
+                .email(email)
+                .password(encodedPassword)
+                .salt(salt)
+                .build();
+
+        given(memberRepository.findByEmail(email)).willReturn(Collections.singletonList(member));
 
         String loginEmail = null;
-
         try {
-            loginEmail = memberService.login(email, password);
+            loginEmail = memberService.login(email, rawPassword);
         } catch (IllegalStateException e) {
             fail("회원정보가 없습니다.");
         } catch (IllegalArgumentException e) {
@@ -105,11 +138,12 @@ class MemberServiceTest {
 
     @Test
     public void 로그인_회원정보_없음() throws Exception {
-        String email = "fail@example.com";
-        String password = "1234";
+        String failEmail = "fail@example.com";
+
+        given(memberRepository.findByEmail(failEmail)).willReturn(Collections.emptyList());
 
         try {
-            memberService.login(email, password);
+            memberService.login(failEmail, rawPassword);
             fail("회원정보가 있는 경우 실패입니다.");
         } catch (IllegalStateException e) {
             // PASS
@@ -118,11 +152,20 @@ class MemberServiceTest {
 
     @Test
     public void 로그인_비밀번호_불일치() throws Exception {
-        String email = "tester@example.com";
-        String password = "fail";
+        String salt = SHA256Util.generateSalt();
+        String encodedPassword = SHA256Util.encode(rawPassword, salt);
 
+        Member member = Member.builder()
+                .email(email)
+                .password(encodedPassword)
+                .salt(salt)
+                .build();
+
+        given(memberRepository.findByEmail(email)).willReturn(Collections.singletonList(member));
+
+        String failPassword = "fail";
         try {
-            memberService.login(email, password);
+            memberService.login(email, failPassword);
             fail("비밀번호가 일치하는 경우 실패입니다.");
         } catch (IllegalStateException e) {
             fail("회원정보가 없습니다.");
