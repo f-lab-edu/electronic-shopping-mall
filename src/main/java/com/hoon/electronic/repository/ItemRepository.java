@@ -6,6 +6,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query("select i " +
@@ -20,4 +22,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "where c.id = :categoryId and i.id < :cursorId")
     Slice<Item> findItemListByCursorId(Long categoryId, Long cursorId, Pageable pageable);
 
+    @Query("select i " +
+            "from Item i " +
+            "where i.id in :itemIdList")
+    List<Item> findItemListByItemIdList(List<Long> itemIdList);
 }
