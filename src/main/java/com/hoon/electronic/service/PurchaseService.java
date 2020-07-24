@@ -33,20 +33,20 @@ public class PurchaseService {
         if (isMember) {
             member = findMembers.get(0);
         } else {
-            throw new NullPointerException("멤버가 없습니다.");
+            throw new IllegalArgumentException("멤버가 없습니다.");
         }
 
         // 상품 목록 조회
         List<Item> findItemList = itemRepository.findItemListByItemIdList(purchaseDto.getItemIdList());
         if (findItemList.isEmpty()) {
-            throw new NullPointerException("상품 목록이 없습니다.");
+            throw new IllegalArgumentException("상품 목록이 없습니다.");
         }
 
         // 구매상품 목록 생성
-        List<PurchaseItem> purchaseItemList = PurchaseItem.createPurchaseItemList(findItemList);
+        List<PurchaseItem> purchaseItemList = PurchaseItem.from(findItemList);
 
         // 구매 생성
-        Purchase purchase = Purchase.createPurchase(member, purchaseItemList);
+        Purchase purchase = Purchase.from(member, purchaseItemList);
 
         // 구매 등록
         purchaseRepository.save(purchase);

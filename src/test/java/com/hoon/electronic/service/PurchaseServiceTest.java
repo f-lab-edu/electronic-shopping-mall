@@ -85,7 +85,7 @@ public class PurchaseServiceTest {
         try {
             purchaseService.register(new CreatePurchaseDto(email, itemIdList));
             fail("멤버가 없어서 예외가 발생해야 한다.");
-        } catch (NullPointerException e) {
+        } catch (IllegalArgumentException e) {
             // PASS
         }
 
@@ -110,7 +110,7 @@ public class PurchaseServiceTest {
         List<Long> itemIdList = null;
 
         // 아이템 목록 생성
-        List<Item> itemList = null;
+        List<Item> itemList = new ArrayList<>();
 
         // given
         given(memberRepository.findByEmail(email)).willReturn(findMembers);
@@ -120,7 +120,7 @@ public class PurchaseServiceTest {
         try {
             purchaseService.register(new CreatePurchaseDto(email, itemIdList));
             fail("상품 목록이 없어서 예외가 발생해야 한다.");
-        } catch (NullPointerException e) {
+        } catch (IllegalArgumentException e) {
             // PASS
         }
 

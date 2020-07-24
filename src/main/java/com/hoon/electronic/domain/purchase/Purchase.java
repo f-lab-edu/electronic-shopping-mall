@@ -51,7 +51,7 @@ public class Purchase {
     /**
      * 구매 생성
      */
-    public static Purchase createPurchase(Member member, List<PurchaseItem> purchaseItemList) {
+    public static Purchase from(Member member, List<PurchaseItem> purchaseItemList) {
         Purchase purchase = Purchase.builder()
                 .member(member)
                 .purchaseDateTime(LocalDateTime.now())

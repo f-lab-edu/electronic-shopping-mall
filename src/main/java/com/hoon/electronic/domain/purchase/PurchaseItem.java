@@ -44,7 +44,7 @@ public class PurchaseItem {
     /**
      * 구매상품 목록 생성
      */
-    public static List<PurchaseItem> createPurchaseItemList(List<Item> itemList) {
+    public static List<PurchaseItem> from(List<Item> itemList) {
         List<PurchaseItem> purchaseItemList = new ArrayList<>();
 
         for (Item item : itemList) {

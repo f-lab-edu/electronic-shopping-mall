@@ -1,6 +1,6 @@
 package com.hoon.electronic.controller;
 
-import com.hoon.electronic.aop.LoginType;
+import com.hoon.electronic.aop.LoginVerification;
 import com.hoon.electronic.domain.purchase.CreatePurchaseDto;
 import com.hoon.electronic.service.PurchaseService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class PurchaseController {
 
     private final PurchaseService purchaseService;
 
-    @LoginType(level = MEMBER)
+    @LoginVerification(level = MEMBER)
     @PostMapping
     public HttpStatus purchase(@RequestBody CreatePurchaseDto purchaseDto) {
 
