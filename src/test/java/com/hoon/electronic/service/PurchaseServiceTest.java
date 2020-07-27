@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
@@ -82,12 +82,9 @@ public class PurchaseServiceTest {
         given(memberRepository.findByEmail(email)).willReturn(findMembers);
 
         // when
-        try {
+        assertThrows(IllegalArgumentException.class, () -> {
             purchaseService.register(new CreatePurchaseDto(email, itemIdList));
-            fail("멤버가 없어서 예외가 발생해야 한다.");
-        } catch (IllegalArgumentException e) {
-            // PASS
-        }
+        });
 
         // then
         then(itemRepository)
@@ -117,12 +114,10 @@ public class PurchaseServiceTest {
         given(memberService.isExistMember(findMembers)).willReturn(true);
         given(itemRepository.findItemListByItemIdList(itemIdList)).willReturn(itemList);
 
-        try {
+        // when
+        assertThrows(IllegalArgumentException.class, () -> {
             purchaseService.register(new CreatePurchaseDto(email, itemIdList));
-            fail("상품 목록이 없어서 예외가 발생해야 한다.");
-        } catch (IllegalArgumentException e) {
-            // PASS
-        }
+        });
 
         // then
         then(purchaseRepository)
