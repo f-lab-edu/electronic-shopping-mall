@@ -1,5 +1,6 @@
 package com.hoon.electronic.domain;
 
+import com.hoon.electronic.domain.purchase.Purchase;
 import org.apache.commons.lang3.StringUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

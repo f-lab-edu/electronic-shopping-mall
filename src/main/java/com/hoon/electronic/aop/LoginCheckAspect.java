@@ -13,11 +13,11 @@ import javax.servlet.http.HttpSession;
 @Component
 public class LoginCheckAspect {
 
-    @Before("@annotation(com.hoon.electronic.aop.LoginType) && @annotation(loginType)")
-    public void loginCheck(LoginType loginType) {
+    @Before("@annotation(com.hoon.electronic.aop.LoginVerification) && @annotation(loginVerification)")
+    public void loginCheck(LoginVerification loginVerification) {
         HttpSession session = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getSession();
 
-        switch (loginType.level()) {
+        switch (loginVerification.level()) {
             case ADMIN:
                 verifyAdminSession(session);
                 break;
