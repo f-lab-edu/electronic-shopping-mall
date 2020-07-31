@@ -1,6 +1,6 @@
 package com.hoon.electronic.controller;
 
-import com.hoon.electronic.aop.LoginType;
+import com.hoon.electronic.aop.LoginVerification;
 import com.hoon.electronic.domain.item.CreateItemDto;
 import com.hoon.electronic.domain.item.ItemDto;
 import com.hoon.electronic.domain.item.UpdateItemDto;
@@ -37,7 +37,7 @@ public class ItemController {
         return itemService.list(categoryId, cursorId);
     }
 
-    @LoginType(level = ADMIN)
+    @LoginVerification(level = ADMIN)
     @PostMapping
     public HttpStatus create(@RequestParam("categoryId") Long categoryId,
                              @RequestBody CreateItemDto createItemDto) {
@@ -47,7 +47,7 @@ public class ItemController {
         return HttpStatus.CREATED;
     }
 
-    @LoginType(level = ADMIN)
+    @LoginVerification(level = ADMIN)
     @PutMapping("/{id}")
     public HttpStatus update(@PathVariable("id") Long id,
                              @RequestBody UpdateItemDto updateItemDto) {
