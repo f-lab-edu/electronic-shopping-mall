@@ -1,7 +1,7 @@
 package com.hoon.electronic.domain.purchase;
 
 import com.hoon.electronic.domain.Member;
-import com.hoon.electronic.domain.payment.Payment;
+import com.hoon.electronic.domain.Payment;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
