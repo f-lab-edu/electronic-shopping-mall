@@ -1,5 +1,6 @@
 package com.hoon.electronic.domain;
 
+import com.hoon.electronic.domain.purchase.Purchase;
 import org.apache.commons.lang3.StringUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,10 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -62,6 +66,10 @@ public class Member {
      */
     @Enumerated(EnumType.STRING)
     private AccountPermissionLevel level;
+
+    @OneToMany(mappedBy = "member")
+    @Builder.Default
+    private List<Purchase> purchaseList = new ArrayList<>();
 
     private LocalDateTime createDateTime;
 

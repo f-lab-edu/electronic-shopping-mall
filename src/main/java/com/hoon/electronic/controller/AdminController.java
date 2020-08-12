@@ -1,9 +1,6 @@
 package com.hoon.electronic.controller;
 
-import com.hoon.electronic.domain.CreateMemberDto;
 import com.hoon.electronic.domain.LoginDto;
-import com.hoon.electronic.domain.Member;
-import com.hoon.electronic.domain.AccountPermissionLevel;
 import com.hoon.electronic.service.MemberService;
 import com.hoon.electronic.util.HttpSessionUtil;
 import lombok.RequiredArgsConstructor;
@@ -16,30 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/members")
+@RequestMapping("/admins")
 @RequiredArgsConstructor
-public class MemberController {
+public class AdminController {
 
     private final MemberService memberService;
-
-    @PostMapping
-    public HttpStatus create(@RequestBody @Valid CreateMemberDto createMemberDto) {
-        Member member = Member.builder()
-                .email(createMemberDto.getEmail())
-                .password(createMemberDto.getPassword())
-                .name(createMemberDto.getName())
-                .phone(createMemberDto.getPhone())
-                .level(AccountPermissionLevel.MEMBER)
-                .createDateTime(LocalDateTime.now())
-                .build();
-
-        memberService.join(member);
-
-        return HttpStatus.CREATED;
-    }
 
     @PostMapping("/login")
     public HttpStatus login(@RequestBody @Valid LoginDto loginDto, HttpSession session) {
@@ -48,14 +28,14 @@ public class MemberController {
 
         String loginEmail = memberService.login(email, password);
 
-        HttpSessionUtil.setLoginMemberEmail(session, loginEmail);
+        HttpSessionUtil.setLoginAdminEmail(session, loginEmail);
 
         return HttpStatus.OK;
     }
 
     @GetMapping("/logout")
     public HttpStatus logout(HttpSession session) {
-        HttpSessionUtil.logoutMember(session);
+        HttpSessionUtil.logoutAdmin(session);
 
         return HttpStatus.OK;
     }
