@@ -2,6 +2,7 @@ package com.hoon.electronic.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -27,14 +28,10 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfo(
-                "Electronic Shopping Mall API",
-                "전자 물품 거래 서비스 API 문서",
-                "ver1",
-                "www.example.com",
-                new Contact("Contact Me", "www.example.com", "foo@example.com"),
-                "Licenses",
-                "www.example.com",
-                new ArrayList<>());
+        return new ApiInfoBuilder()
+                .title("Electronic Shopping Mall API")
+                .description("전자 물품 거래 서비스 API 문서")
+                .version("ver1")
+                .build();
     }
 }
