@@ -51,6 +51,12 @@ public class ItemController {
         return itemService.list(categoryId, cursorId);
     }
 
+    @GetMapping("/{id}")
+    public ItemDto detail(@PathVariable("id") Long id) {
+
+        return itemService.getItem(id);
+    }
+
     @LoginVerification(level = ADMIN)
     @ApiOperation(value = "상품 등록", notes = "새로운 상품을 등록합니다.")
     @ApiImplicitParams({
