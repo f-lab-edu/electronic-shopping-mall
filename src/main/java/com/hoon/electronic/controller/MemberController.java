@@ -1,11 +1,13 @@
 package com.hoon.electronic.controller;
 
+import com.hoon.electronic.domain.AccountPermissionLevel;
 import com.hoon.electronic.domain.CreateMemberDto;
 import com.hoon.electronic.domain.LoginDto;
 import com.hoon.electronic.domain.Member;
-import com.hoon.electronic.domain.AccountPermissionLevel;
 import com.hoon.electronic.service.MemberService;
 import com.hoon.electronic.util.HttpSessionUtil;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,12 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @ApiOperation(value = "회원가입", notes = "회원가입을 진행합니다.")
+    @ApiImplicitParam(
+            name = "createMemberDto",
+            value = "회원가입 정보를 담은 오브젝트",
+            dataType = "CreateMemberDto",
+            required = true)
     @PostMapping
     public HttpStatus create(@RequestBody @Valid CreateMemberDto createMemberDto) {
         Member member = Member.builder()
@@ -41,6 +49,12 @@ public class MemberController {
         return HttpStatus.CREATED;
     }
 
+    @ApiOperation(value = "회원 로그인", notes = "회원 로그인을 진행합니다.")
+    @ApiImplicitParam(
+            name = "loginDto",
+            value = "회원 로그인 정보를 담은 오브젝트",
+            dataType = "LoginDto",
+            required = true)
     @PostMapping("/login")
     public HttpStatus login(@RequestBody @Valid LoginDto loginDto, HttpSession session) {
         String email = loginDto.getEmail();
@@ -53,6 +67,7 @@ public class MemberController {
         return HttpStatus.OK;
     }
 
+    @ApiOperation(value = "회원 로그아웃", notes = "회원 로그아웃을 진행합니다.")
     @GetMapping("/logout")
     public HttpStatus logout(HttpSession session) {
         HttpSessionUtil.logoutMember(session);
