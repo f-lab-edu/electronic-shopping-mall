@@ -36,5 +36,10 @@ spring:
 #        갯수만큼 쿼리가 N번 호출되기 때문에 성능을 떨어뜨릴 수 있다.
         default_batch_fetch_size: 100
 
+  cache: redis
+  redis:
+    host:
+    port: 
+
 logging.level:
   org.hibernate.SQL: debug

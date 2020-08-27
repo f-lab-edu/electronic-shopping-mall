@@ -8,6 +8,7 @@ import com.hoon.electronic.domain.item.UpdateItemDto;
 import com.hoon.electronic.repository.CategoryRepository;
 import com.hoon.electronic.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -41,6 +42,14 @@ public class ItemService {
         } else {
             return itemRepository.findItemListByCursorId(categoryId, cursorId, pageRequest);
         }
+    }
+
+    @Cacheable(value = "item", key = "#id")
+    public ItemDto getItem(Long id) {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("없는 아이템입니다."));
+
+        return new ItemDto(item);
     }
 
     @Transactional
