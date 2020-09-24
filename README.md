@@ -35,3 +35,4 @@ URI 설계 시 일관적인 명명 규칙을 적용하여 API 직관적으로 �
 Spring boot, Gradle, JPA, MySQL, Java8, Jenkins   
 
 ### ERD
+![image](https://user-images.githubusercontent.com/25922366/94115073-306fe880-fe84-11ea-8b20-117e1ccd973d.png)
