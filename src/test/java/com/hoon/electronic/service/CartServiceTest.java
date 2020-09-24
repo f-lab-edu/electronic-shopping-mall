@@ -3,6 +3,7 @@ package com.hoon.electronic.service;
 import com.hoon.electronic.domain.cart.CartItemAttributeDto;
 import com.hoon.electronic.domain.cart.CartItemDto;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,7 +41,8 @@ class CartServiceTest {
     }
 
     @Test
-    public void 장바구니_목록_조회() throws Exception {
+    @DisplayName("장바구니 목록 조회")
+    public void get_list() throws Exception {
         // 장바구니 상품 생성
         List<CartItemAttributeDto> cartItemAttributeDtoList = new ArrayList<>();
         cartItemAttributeDtoList.add(new CartItemAttributeDto("attr1", "value1"));
@@ -74,7 +76,8 @@ class CartServiceTest {
     }
 
     @Test
-    public void 장바구니_목록_조회_size_null() throws Exception {
+    @DisplayName("장바구니 목록 조회 시 값(size)이 null인 경우")
+    public void get_list_but_size_null() throws Exception {
         // given
         String email = "test@example.com";
         String cartKey = "cart:" + email;

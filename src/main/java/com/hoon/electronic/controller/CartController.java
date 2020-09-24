@@ -28,7 +28,7 @@ public class CartController {
 
     @LoginVerification(level = MEMBER)
     @PostMapping
-    public HttpStatus create(@RequestBody CartItemDto cartItemDto, HttpSession session) {
+    public HttpStatus add(@RequestBody CartItemDto cartItemDto, HttpSession session) {
         String loginMemberEmail = HttpSessionUtil.getLoginMemberEmail(session);
 
         cartService.register(cartItemDto, loginMemberEmail);
