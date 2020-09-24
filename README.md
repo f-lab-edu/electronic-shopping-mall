@@ -5,6 +5,7 @@
 ### CI
 젠킨스를 사용해서 테스트, 빌드를 자동화했습니다.   
 젠킨스는 깃허브 웹훅을 받아서 CI를 진행합니다.
+   
 ![플로우차트](https://user-images.githubusercontent.com/25922366/94126709-e8a48d80-fe92-11ea-8f7d-c4488b54e827.png)
 
 ### HTTP 상태 코드
